@@ -1,0 +1,105 @@
+{{define "reports.html"}}
+{{template "page_start" .}}
+<div class="t-pagehead">
+  <h1 class="t-pagehead__title">{{.T "reports.title"}}</h1>
+  <span class="t-pagehead__meta">{{.Range .From .To}}</span>
+</div>
+
+<div class="t-report">
+  <div class="t-report__col">
+
+    <section class="t-card">
+      <div class="t-range">
+        <div class="t-chips">
+          <a class="t-chip" href="/reports?period=week"{{if eq .Period "week"}} aria-current="true"{{end}}>{{.T "reports.week"}}</a>
+          <a class="t-chip" href="/reports?period=month"{{if eq .Period "month"}} aria-current="true"{{end}}>{{.T "reports.month"}}</a>
+          <a class="t-chip" href="/reports?period=prev"{{if eq .Period "prev"}} aria-current="true"{{end}}>{{.T "reports.prev_month"}}</a>
+          <a class="t-chip" href="/reports?period=year"{{if eq .Period "year"}} aria-current="true"{{end}}>{{.T "reports.year"}}</a>
+        </div>
+        <form method="get" action="/reports" class="t-form" style="gap:12px">
+          <div class="t-row2">
+            <div class="t-field">
+              <label class="t-field__label" for="from">{{.T "reports.from"}}</label>
+              <input class="t-input" type="date" id="from" name="from" value="{{.ISO .From}}" max="{{.TodayISO}}">
+            </div>
+            <div class="t-field">
+              <label class="t-field__label" for="to">{{.T "reports.to"}}</label>
+              <input class="t-input" type="date" id="to" name="to" value="{{.ISO .To}}" max="{{.TodayISO}}">
+            </div>
+          </div>
+          {{with .RangeError}}<p class="t-field__error">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+          <button class="t-btn t-btn--secondary t-btn--block" type="submit">{{.T "reports.show"}}</button>
+        </form>
+      </div>
+    </section>
+
+    {{if and (not .RangeError) .Count}}
+    <section class="t-card">
+      <div class="t-stats">
+        <div>
+          <p class="t-stat__label">{{.T "reports.total"}}</p>
+          {{$t := .Money .Total}}
+          <span class="t-money t-money--l{{if $t.Fit}} t-money--fit{{end}}">{{$t.Whole}}<span class="t-money__minor">{{$t.Minor}}</span><span class="t-money__cur">{{$t.Sign}}</span></span>
+        </div>
+        <div class="t-stat--count">
+          <p class="t-stat__label">{{.T "reports.count"}}</p>
+          <span class="t-money" style="font-size:22px;line-height:28px;font-weight:600">{{.Count}}</span>
+        </div>
+      </div>
+      <a class="t-btn t-btn--secondary t-btn--block" style="margin-top:20px" href="/reports.csv?{{.CSVQuery}}">{{template "icon-download"}}{{.T "reports.export"}}</a>
+    </section>
+
+    <section class="t-card">
+      <div class="t-card__head"><h2 class="t-card__title">{{.T "reports.by_category"}}</h2></div>
+      <div class="t-bars">
+        {{range .ByCategory}}
+        <div class="t-bar t-c{{.ColorSlot}}">
+          <span class="t-dot t-c{{.ColorSlot}}"></span>
+          <span class="t-bar__name">{{.Name}}</span>
+          <span class="t-bar__val">{{$.Amount .TotalMinor}} <span class="t-bar__pct">{{pct .Percent}}%</span></span>
+          <span class="t-bar__track"><span class="t-bar__fill" style="--w: {{f1 .BarPercent}}%"></span></span>
+        </div>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+  </div>
+
+  <div class="t-report__col">
+    {{if .RangeError}}
+    <section class="t-card">
+      <div class="t-empty">
+        <span class="t-empty__icon">{{template "icon-alert"}}</span>
+        <p class="t-empty__title">{{.RangeError}}</p>
+        <p class="t-empty__text">{{.T "reports.empty_text"}}</p>
+      </div>
+    </section>
+    {{else if .Count}}
+    <section class="t-card">
+      <div class="t-card__head"><h2 class="t-card__title">{{.T "reports.list"}}</h2><span class="t-card__meta">{{.Plural .Count}}</span></div>
+      {{range .Days}}
+      <div class="t-day__head">
+        <span>{{$.WeekdayDay .Date}}</span>
+        <span class="t-money">{{$.Amount .Total}}</span>
+      </div>
+      <div class="t-list">
+        {{range .Items}}{{template "expense_row_plain" dict "P" $.Page "E" . "ShowCategory" true}}{{end}}
+      </div>
+      {{end}}
+      {{if .Hidden}}
+      <div class="t-more"><a class="t-btn t-btn--secondary t-btn--sm" href="/reports?{{.CSVQuery}}&all=1">{{.T "reports.show"}} +{{.Hidden}}</a></div>
+      {{end}}
+    </section>
+    {{else}}
+    <section class="t-card">
+      <div class="t-empty">
+        <span class="t-empty__icon">{{template "icon-chart"}}</span>
+        <p class="t-empty__title">{{.Tf "reports.empty_title" (.Range .From .To)}}</p>
+        <p class="t-empty__text">{{.T "reports.empty_text"}}</p>
+      </div>
+    </section>
+    {{end}}
+  </div>
+</div>
+{{template "page_end" .}}
+{{end}}

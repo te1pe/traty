@@ -1,0 +1,63 @@
+{{define "categories.html"}}
+{{template "page_start" .}}
+<div class="t-narrow">
+<div class="t-pagehead"><h1 class="t-pagehead__title">{{.T "categories.title"}}</h1></div>
+
+<div class="t-stack">
+  <section class="t-card">
+    <div class="t-card__head"><h2 class="t-card__title">{{.T "categories.new"}}</h2></div>
+    <form method="post" action="/categories" class="t-form" style="gap:12px;margin-top:12px">
+      <div class="t-field">
+        <label class="t-vh" for="cat-name">{{.T "categories.new"}}</label>
+        <input class="t-input" id="cat-name" name="name" maxlength="32" value="{{.NewName}}"
+               placeholder="{{.T "categories.new_placeholder"}}" autocomplete="off" required
+               {{if .Error}}aria-invalid="true" aria-describedby="cat-err"{{end}}>
+        {{with .Error}}<p class="t-field__error" id="cat-err">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+      </div>
+      <button class="t-btn t-btn--primary t-btn--block" type="submit">{{.T "categories.add"}}</button>
+    </form>
+  </section>
+
+  {{if .Rows}}
+  <div>
+    <p class="t-group__label">{{.T "categories.yours"}}</p>
+    <div class="t-group">
+      {{range .Rows}}
+      <div class="t-cell t-cell--dot" style="cursor:default">
+        <span class="t-dot t-c{{.ColorSlot}}"></span>
+        <span class="t-cell__body">
+          <span class="t-cell__title">{{.Name}}</span>
+          <span class="t-cell__sub">{{$.Plural .Count}}</span>
+        </span>
+        <button class="t-btn t-btn--danger-ghost t-btn--sm" type="button" popovertarget="del-cat-{{.ID}}" aria-label="{{$.Tf "confirm.delete_category" .Name}}">{{template "icon-trash"}}</button>
+      </div>
+      {{end}}
+    </div>
+    <p class="t-group__foot">{{.T "categories.note"}}</p>
+  </div>
+
+  {{range .Rows}}
+  <div class="t-alert" popover id="del-cat-{{.ID}}" role="alertdialog" aria-labelledby="del-cat-title-{{.ID}}">
+    <p class="t-alert__title" id="del-cat-title-{{.ID}}">{{$.Tf "confirm.delete_category" .Name}}</p>
+    <p class="t-alert__text">{{$.T "confirm.delete_category_text"}}</p>
+    <div class="t-alert__actions">
+      <form method="post" action="/categories/{{.ID}}/delete">
+        <button class="t-btn t-btn--danger t-btn--block" type="submit">{{$.T "action.delete"}}</button>
+      </form>
+      <button class="t-btn t-btn--ghost t-btn--block" type="button" popovertarget="del-cat-{{.ID}}" popovertargetaction="hide">{{$.T "action.cancel"}}</button>
+    </div>
+  </div>
+  {{end}}
+  {{else}}
+  <div class="t-card">
+    <div class="t-empty">
+      <span class="t-empty__icon">{{template "icon-categories"}}</span>
+      <p class="t-empty__title">{{.T "categories.empty_title"}}</p>
+      <p class="t-empty__text">{{.T "categories.empty_text"}}</p>
+    </div>
+  </div>
+  {{end}}
+</div>
+</div>
+{{template "page_end" .}}
+{{end}}

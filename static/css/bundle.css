@@ -1,0 +1,398 @@
+/* Траты — стили компонентов. Подключается после tokens.css. Все классы с префиксом t-. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light; -webkit-text-size-adjust: 100%; }
+[data-theme="dark"] { color-scheme: dark; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-sans); font-size: 16px; line-height: 24px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+svg.t-i { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+svg.t-i--sm { width: 20px; height: 20px; }
+.t-vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Категория: цвет через --c ---------- */
+.t-c1 { --c: var(--cat-1); } .t-c2 { --c: var(--cat-2); } .t-c3 { --c: var(--cat-3); } .t-c4 { --c: var(--cat-4); }
+.t-c5 { --c: var(--cat-5); } .t-c6 { --c: var(--cat-6); } .t-c7 { --c: var(--cat-7); } .t-c8 { --c: var(--cat-8); }
+.t-cother { --c: var(--cat-other); }
+.t-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--c, var(--ink-3)); flex: none; }
+
+/* ---------- Деньги ---------- */
+.t-money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.t-money--hero { display: block; font-size: 56px; line-height: 60px; font-weight: 600; letter-spacing: -0.035em; font-variant-numeric: normal; }
+.t-money--l { display: block; font-size: 34px; line-height: 40px; font-weight: 600; letter-spacing: -0.025em; font-variant-numeric: normal; }
+.t-money--hero.t-money--fit { font-size: 40px; line-height: 48px; }
+.t-money__minor, .t-money__cur { font-size: 0.6em; letter-spacing: -0.01em; color: var(--ink-2); }
+.t-money__approx { color: var(--ink-2); font-weight: 500; }
+.t-money--hero .t-money__approx, .t-money--l .t-money__approx { font-size: 0.6em; }
+
+/* ---------- Кнопки ---------- */
+.t-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px; border: 0; border-radius: var(--radius-full);
+  font-size: 16px; line-height: 20px; font-weight: 600; letter-spacing: -0.005em;
+  text-decoration: none; cursor: pointer; white-space: nowrap; user-select: none;
+  transition: background-color .16s ease, transform .16s ease, opacity .16s ease;
+}
+.t-btn:active { transform: scale(0.98); }
+.t-btn:focus-visible, .t-add:focus-visible, .t-close:focus-visible, .t-tab:focus-visible, .t-navitem:focus-visible,
+.t-exp:focus-visible, .t-cell:focus-visible, .t-legend a:focus-visible, .t-seg__opt:focus-visible, .t-link:focus-visible {
+  outline: 2px solid transparent; box-shadow: var(--focus-ring);
+}
+.t-btn--primary { background: var(--action); color: var(--on-action); }
+.t-btn--secondary { background: var(--fill); color: var(--ink); }
+.t-btn--ghost { background: transparent; color: var(--ink); }
+.t-btn--danger { background: var(--danger); color: var(--on-danger); }
+.t-btn--danger-ghost { background: transparent; color: var(--danger); }
+.t-btn--lg { height: 52px; padding: 0 24px; font-size: 17px; }
+.t-btn--sm { height: 36px; padding: 0 14px; font-size: 15px; gap: 6px; }
+.t-btn--sm .t-i { width: 18px; height: 18px; }
+.t-btn--block { display: flex; width: 100%; }
+.t-btn[disabled], .t-btn[aria-disabled="true"] { opacity: .4; pointer-events: none; }
+@media (hover: hover) {
+  .t-btn--primary:hover { background: var(--action-hover); }
+  .t-btn--secondary:hover, .t-btn--ghost:hover { background: var(--fill-strong); }
+  .t-btn--danger-ghost:hover { background: var(--danger-soft); }
+}
+.t-link { color: var(--ink-2); font-size: 15px; line-height: 20px; text-decoration: none; border-radius: 6px; }
+@media (hover: hover) { .t-link:hover { color: var(--ink); } }
+
+/* Кнопка закрытия шторки */
+.t-close {
+  display: grid; place-items: center; width: 40px; height: 40px; flex: none;
+  border: 0; border-radius: 50%; background: var(--fill); color: var(--ink-2); cursor: pointer; text-decoration: none;
+}
+.t-close svg { width: 20px; height: 20px; }
+@media (hover: hover) { .t-close:hover { background: var(--fill-strong); color: var(--ink); } }
+
+/* ---------- Каркас приложения ---------- */
+.t-app { min-height: 100dvh; }
+.t-main { width: 100%; max-width: 560px; margin: 0 auto; padding: env(safe-area-inset-top) 16px 96px; }
+.t-stack { display: grid; gap: 24px; }
+.t-pagehead { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 20px 0 16px; }
+.t-pagehead__title { font-size: 28px; line-height: 34px; font-weight: 700; letter-spacing: -0.022em; }
+.t-pagehead__meta { font-size: 15px; line-height: 20px; color: var(--ink-2); }
+@media (min-width: 1024px) {
+  .t-app { display: grid; grid-template-columns: 248px minmax(0, 1fr); }
+  .t-main { max-width: 1080px; margin: 0; padding: 32px 40px 64px; }
+  .t-pagehead { padding: 8px 0 24px; }
+}
+
+/* ---------- Нижняя панель вкладок (мобильный) ---------- */
+.t-tabbar {
+  position: fixed; z-index: 40; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom));
+  max-width: 520px; margin: 0 auto; height: 64px; padding: 0 6px;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center;
+  background: var(--bar); -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6);
+  border-radius: var(--radius-full); box-shadow: var(--shadow-float);
+}
+.t-tab {
+  display: grid; justify-items: center; gap: 2px; padding: 6px 0; border-radius: 20px;
+  color: var(--ink-2); text-decoration: none; font-size: 11px; line-height: 13px; font-weight: 500; letter-spacing: .01em;
+}
+.t-tab__icon { display: grid; place-items: center; width: 48px; height: 30px; border-radius: var(--radius-full); transition: background-color .2s ease; }
+.t-tab[aria-current="page"] { color: var(--ink); font-weight: 600; }
+.t-tab[aria-current="page"] .t-tab__icon { background: var(--fill); }
+.t-tab[aria-current="page"] .t-i { stroke-width: 2.1; }
+.t-add {
+  justify-self: center; display: grid; place-items: center; width: 56px; height: 56px;
+  border: 0; border-radius: 50%; background: var(--action); color: var(--on-action); cursor: pointer; text-decoration: none;
+  transition: transform .16s ease;
+}
+.t-add .t-i { width: 26px; height: 26px; stroke-width: 2.25; }
+.t-add:active { transform: scale(0.94); }
+@media (min-width: 1024px) { .t-tabbar { display: none; } }
+/* Запасной путь для браузеров без Popover API: ссылка на /expenses/new вместо кнопки */
+.t-add--link { display: none; }
+@supports not selector(:popover-open) { .t-add--button { display: none; } .t-add--link { display: grid; } }
+
+/* ---------- Боковое меню (десктоп) ---------- */
+.t-sidebar { display: none; flex-direction: column; gap: 24px; padding: 28px 16px; border-right: 1px solid var(--line); }
+@media (min-width: 1024px) { .t-sidebar { display: flex; position: sticky; top: 0; height: 100dvh; } }
+.t-brand { padding: 0 12px; font-size: 20px; line-height: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.t-nav { display: grid; gap: 2px; }
+.t-navitem {
+  display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: var(--radius-sm);
+  color: var(--ink-2); text-decoration: none; font-size: 15px; line-height: 20px; font-weight: 500;
+}
+.t-navitem .t-i { width: 20px; height: 20px; }
+.t-navitem[aria-current="page"] { background: var(--fill); color: var(--ink); font-weight: 600; }
+@media (hover: hover) { .t-navitem:hover { background: var(--fill); color: var(--ink); } }
+
+/* ---------- Карточка ---------- */
+.t-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 20px; }
+.t-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+.t-card__title { font-size: 17px; line-height: 22px; font-weight: 600; letter-spacing: -0.008em; }
+.t-card__meta { font-size: 15px; line-height: 20px; color: var(--ink-2); }
+
+/* ---------- Сводка «Сегодня» ---------- */
+.t-today { padding: 20px 4px 4px; }
+.t-today__label { font-size: 15px; line-height: 20px; font-weight: 500; color: var(--ink-2); margin-bottom: 4px; }
+.t-today__hint { margin-top: 4px; font-size: 15px; line-height: 20px; color: var(--ink-2); }
+
+/* ---------- Карточка «Эта неделя» + диаграмма ---------- */
+.t-week__chart { display: flex; align-items: center; gap: 20px; margin-top: 20px; }
+@media (max-width: 359px) { .t-week__chart { flex-direction: column; align-items: stretch; } .t-week__chart .t-donut { align-self: center; } }
+.t-donut { position: relative; width: 128px; height: 128px; flex: none; }
+.t-donut svg { display: block; width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.t-donut__track { fill: none; stroke: var(--fill); stroke-width: 12; }
+.t-donut__seg { fill: none; stroke: var(--c); stroke-width: 12; transition: stroke-width .2s ease; }
+.t-donut a { outline: none; }
+.t-donut a:hover .t-donut__seg, .t-donut a:focus-visible .t-donut__seg, .t-donut__seg.is-active { stroke-width: 18; }
+.t-donut:has(.is-active) .t-donut__seg:not(.is-active) { opacity: .35; }
+.t-donut__center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; }
+.t-donut__num { font-size: 22px; line-height: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.t-donut__cap { font-size: 13px; line-height: 16px; color: var(--ink-2); }
+.t-legend { list-style: none; margin: 0; padding: 0; flex: 1; min-width: 0; display: grid; }
+.t-legend a {
+  display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; align-items: center; gap: 10px;
+  min-height: 34px; margin: 0 -8px; padding: 0 8px; border-radius: 10px; text-decoration: none;
+}
+.t-legend__name { font-size: 15px; line-height: 20px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-legend__pct { font-size: 15px; line-height: 20px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.t-legend a:active { background: var(--fill); }
+@media (hover: hover) { .t-legend a:hover { background: var(--fill); } }
+
+/* ---------- Строка расхода ---------- */
+.t-list { display: grid; }
+.t-exp {
+  position: relative; display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; column-gap: 12px; align-items: start;
+  padding: 12px 20px; margin: 0 -20px; text-decoration: none; color: inherit;
+}
+.t-exp + .t-exp::before { content: ""; position: absolute; top: 0; left: 42px; right: 20px; border-top: 1px solid var(--line); }
+.t-exp .t-dot { margin-top: 6px; }
+.t-exp__main, .t-exp__side { display: grid; gap: 2px; min-width: 0; }
+.t-exp__side { justify-items: end; }
+.t-exp__cat { font-size: 16px; line-height: 22px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-exp__note { font-size: 15px; line-height: 20px; color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-exp__amt { font-size: 16px; line-height: 22px; font-weight: 500; }
+.t-exp__date { font-size: 13px; line-height: 20px; color: var(--ink-2); white-space: nowrap; }
+.t-exp:active { background: var(--fill); }
+@media (hover: hover) { .t-exp:hover { background: var(--fill); } .t-exp:hover::before, .t-exp:hover + .t-exp::before { opacity: 0; } }
+.t-exp--plain { grid-template-columns: minmax(0, 1fr) auto; }
+.t-exp--plain + .t-exp--plain::before { left: 20px; }
+.t-exp__muted { color: var(--ink-2); font-weight: 400; }
+@media (min-width: 768px) {
+  .t-sheet .t-exp { margin: 0 -24px; padding-left: 24px; padding-right: 24px; }
+  .t-sheet .t-exp + .t-exp::before { left: 46px; right: 24px; }
+  .t-sheet .t-exp--plain + .t-exp--plain::before { left: 24px; }
+}
+.t-exp.is-new { animation: t-flash 1.6s ease-out; }
+@keyframes t-flash { from { background: var(--fill-strong); } to { background: transparent; } }
+
+/* Группа по дням (отчёт) */
+.t-day__head { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0 4px; font-size: 13px; line-height: 18px; color: var(--ink-2); }
+.t-day__head:first-child { padding-top: 0; }
+
+/* ---------- Сгруппированный список (настройки, категории) ---------- */
+.t-group { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); overflow: hidden; }
+.t-group__label { margin: 24px 20px 8px; font-size: 13px; line-height: 18px; font-weight: 500; color: var(--ink-2); }
+.t-group__foot { margin: 8px 20px 0; font-size: 13px; line-height: 18px; color: var(--ink-2); }
+.t-cell {
+  position: relative; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 12px 20px;
+  border: 0; background: transparent; color: inherit; text-align: left; text-decoration: none; cursor: pointer;
+}
+.t-cell + .t-cell::before { content: ""; position: absolute; top: 0; left: 20px; right: 0; border-top: 1px solid var(--line); }
+.t-cell--dot + .t-cell--dot::before { left: 42px; }
+.t-cell__title { flex: 1; min-width: 0; font-size: 16px; line-height: 22px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-cell__sub { display: block; font-size: 13px; line-height: 18px; color: var(--ink-2); }
+.t-cell__value { font-size: 15px; line-height: 20px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.t-cell__chev { color: var(--ink-3); }
+.t-cell__check { color: var(--ink); visibility: hidden; }
+.t-cell[aria-pressed="true"] .t-cell__check { visibility: visible; }
+.t-cell[aria-pressed="true"] .t-cell__title { font-weight: 600; }
+.t-cell:active { background: var(--fill); }
+@media (hover: hover) { .t-cell:hover { background: var(--fill); } }
+.t-cell__body { flex: 1; min-width: 0; }
+
+/* ---------- Сегментированный переключатель ---------- */
+.t-seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 4px; padding: 4px; background: var(--fill); border-radius: var(--radius-sm); border: 0; margin: 0; min-width: 0; }
+.t-seg__opt, .t-seg label > span {
+  display: flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 8px;
+  border: 0; border-radius: var(--radius-xs); background: transparent; color: var(--ink-2);
+  font-size: 15px; line-height: 20px; font-weight: 500; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  transition: background-color .2s ease, color .2s ease;
+}
+.t-seg label { position: relative; display: block; min-width: 0; }
+.t-seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+a.t-seg__opt { text-decoration: none; }
+.t-seg__opt[aria-pressed="true"], .t-seg__opt[aria-current="true"], .t-seg input:checked + span {
+  background: var(--thumb); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px #14141314, 0 1px 6px #1414130d;
+}
+.t-seg input:focus-visible + span { box-shadow: var(--focus-ring); }
+.t-seg--inset { margin: 12px 20px 16px; }
+
+/* ---------- Чипы (категории, пресеты дат) ---------- */
+.t-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.t-chip { position: relative; display: inline-flex; }
+.t-chip input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.t-chip__face, a.t-chip {
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: var(--radius-full);
+  background: var(--fill); color: var(--ink); font-size: 15px; line-height: 20px; font-weight: 500; cursor: pointer;
+  text-decoration: none; white-space: nowrap; transition: background-color .16s ease, color .16s ease;
+}
+.t-chip__face .t-dot { width: 8px; height: 8px; }
+.t-chip input:checked + .t-chip__face, a.t-chip[aria-current="true"] { background: var(--action); color: var(--on-action); }
+.t-chip input:focus-visible + .t-chip__face, a.t-chip:focus-visible { box-shadow: var(--focus-ring); }
+@media (hover: hover) { .t-chip input:not(:checked) + .t-chip__face:hover, a.t-chip:not([aria-current="true"]):hover { background: var(--fill-strong); } }
+.t-chip--new .t-chip__face { background: transparent; box-shadow: inset 0 0 0 1px var(--line-field); color: var(--ink-2); }
+.t-chip--new input:checked + .t-chip__face { background: var(--action); color: var(--on-action); box-shadow: none; }
+.t-newcat { display: none; margin-top: 8px; }
+.t-field:has(input[value="__new__"]:checked) .t-newcat { display: block; }
+
+/* ---------- Поля ввода ---------- */
+.t-form { display: grid; gap: 20px; }
+.t-field { display: grid; gap: 8px; min-width: 0; border: 0; margin: 0; padding: 0; }
+.t-field__label { font-size: 15px; line-height: 20px; font-weight: 500; color: var(--ink); padding: 0; }
+.t-field__opt { font-weight: 400; color: var(--ink-2); }
+.t-input {
+  display: block; width: 100%; height: 52px; padding: 0 16px; min-width: 0;
+  border: 1px solid var(--line-field); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink);
+  font-size: 16px; line-height: 24px; -webkit-appearance: none; appearance: none;
+}
+.t-input::placeholder { color: var(--ink-2); opacity: 1; }
+.t-input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.t-input[type="date"] { display: flex; align-items: center; }
+.t-input[type="date"]::-webkit-date-and-time-value { text-align: left; }
+.t-field__hint { font-size: 13px; line-height: 18px; color: var(--ink-2); }
+.t-field__error { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; line-height: 18px; color: var(--danger); }
+.t-field__error .t-i { width: 18px; height: 18px; margin-top: 0; }
+.t-input[aria-invalid="true"], .t-input:user-invalid { border-color: var(--danger); box-shadow: 0 0 0 1px var(--danger); }
+.t-field__error--live { display: none; }
+.t-field:has(:user-invalid) .t-field__error--live { display: flex; }
+.t-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Поле суммы */
+.t-amount { display: grid; gap: 8px; }
+.t-amount__box {
+  display: flex; align-items: baseline; gap: 8px; padding: 14px 20px; border-radius: var(--radius-md); background: var(--fill);
+  transition: box-shadow .16s ease;
+}
+.t-amount__box:focus-within { box-shadow: inset 0 0 0 2px var(--ink); }
+.t-amount__input {
+  flex: 1; min-width: 0; width: 100%; padding: 0; border: 0; background: transparent; color: var(--ink); outline: none;
+  font-size: 44px; line-height: 52px; font-weight: 600; letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+}
+.t-amount__input::placeholder { color: var(--ink-3); opacity: 1; }
+.t-amount__cur { font-size: 28px; line-height: 52px; font-weight: 600; color: var(--ink-2); }
+.t-amount.is-invalid .t-amount__box, .t-amount:has(:user-invalid) .t-amount__box { box-shadow: inset 0 0 0 2px var(--danger); }
+
+/* Выбор даты: пресеты + своя дата (показывается через :has) */
+.t-datepick { display: grid; gap: 8px; }
+.t-datepick__custom { display: none; }
+.t-datepick:has(input[value="custom"]:checked) .t-datepick__custom { display: block; }
+
+/* Выбор цвета категории */
+.t-swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.t-swatch { position: relative; display: inline-grid; }
+.t-swatch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.t-swatch span { display: block; width: 32px; height: 32px; border-radius: 50%; background: var(--c); transition: box-shadow .16s ease; }
+.t-swatch input:checked + span { box-shadow: 0 0 0 3px var(--surface-raised), 0 0 0 5px var(--ink); }
+.t-swatch input:focus-visible + span { box-shadow: 0 0 0 3px var(--surface-raised), 0 0 0 5px var(--ink), 0 0 0 7px var(--ink-3); }
+
+/* ---------- Баннер ошибки формы ---------- */
+.t-banner { display: flex; gap: 10px; align-items: flex-start; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 15px; line-height: 20px; }
+.t-banner--danger { background: var(--danger-soft); color: var(--ink); }
+.t-banner--danger .t-i { color: var(--danger); width: 20px; height: 20px; }
+
+/* ---------- Шторка / модальное окно / боковая панель ---------- */
+.t-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+.t-overlay__scrim { position: absolute; inset: 0; background: var(--scrim); animation: t-fade .24s ease both; }
+.t-sheet {
+  position: relative; display: flex; flex-direction: column; width: 100%; max-width: 560px; max-height: calc(100dvh - 24px);
+  padding: 0; border: 0; margin: 0; overflow: hidden;
+  background: var(--surface-raised); color: var(--ink); border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: var(--shadow-float);
+  animation: t-sheet-in .32s cubic-bezier(.2, .8, .2, 1) both;
+}
+.t-sheet__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex: none; padding: 16px 20px 12px; }
+.t-sheet__title { font-size: 20px; line-height: 26px; font-weight: 600; letter-spacing: -0.012em; }
+.t-sheet__body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 20px 8px; }
+.t-sheet__foot { flex: none; display: grid; gap: 8px; padding: 12px 20px calc(16px + env(safe-area-inset-bottom)); }
+.t-sheet__summary { display: grid; gap: 4px; margin-bottom: 20px; }
+/* Шторка как popover (добавление расхода — открывается мгновенно, без запроса к серверу) */
+.t-sheet[popover] { position: fixed; inset: auto 0 0 0; margin: 0 auto; }
+.t-sheet[popover]:not(:popover-open) { display: none; }
+.t-sheet[popover]::backdrop { background: rgb(20 20 19 / .3); }
+@media (min-width: 768px) {
+  .t-overlay { align-items: center; padding: 40px 24px; }
+  .t-sheet { max-width: 480px; max-height: calc(100dvh - 80px); border-radius: var(--radius-lg); animation-name: t-pop-in; }
+  .t-sheet__head { padding: 20px 24px 12px; }
+  .t-sheet__body { padding: 4px 24px 8px; }
+  .t-sheet__foot { padding: 16px 24px 24px; }
+  .t-sheet[popover] { inset: 0; margin: auto; height: fit-content; }
+}
+@media (min-width: 1024px) {
+  .t-overlay--panel { justify-content: flex-end; align-items: stretch; padding: 12px; }
+  .t-overlay--panel .t-sheet { max-width: 440px; max-height: none; height: 100%; animation-name: t-panel-in; }
+}
+@keyframes t-fade { from { opacity: 0; } }
+@keyframes t-sheet-in { from { transform: translateY(32px); opacity: 0; } }
+@keyframes t-pop-in { from { transform: scale(.97); opacity: 0; } }
+@keyframes t-panel-in { from { transform: translateX(24px); opacity: 0; } }
+
+/* ---------- Подтверждение (popover) ---------- */
+.t-alert {
+  width: min(320px, calc(100vw - 48px)); padding: 24px 20px 16px; border: 0; border-radius: var(--radius-lg);
+  background: var(--surface-raised); color: var(--ink); box-shadow: var(--shadow-float); text-align: center;
+}
+.t-alert::backdrop { background: rgb(20 20 19 / .3); }
+.t-alert__title { font-size: 17px; line-height: 22px; font-weight: 600; margin-bottom: 6px; }
+.t-alert__text { font-size: 15px; line-height: 20px; color: var(--ink-2); margin-bottom: 20px; }
+.t-alert__actions { display: grid; gap: 8px; }
+.t-alert__actions form { display: contents; }
+
+/* ---------- Тост ---------- */
+.t-toast {
+  position: fixed; z-index: 60; left: 50%; bottom: calc(88px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 10px; min-height: 48px; max-width: calc(100vw - 32px); padding: 6px 8px 6px 16px;
+  border-radius: var(--radius-full); background: var(--action); color: var(--on-action); box-shadow: var(--shadow-float);
+  font-size: 15px; line-height: 20px; font-weight: 500; white-space: nowrap; transform: translateX(-50%);
+  animation: t-toast-in .32s cubic-bezier(.2, .8, .2, 1) both, t-toast-out .24s ease-in 4s forwards;
+}
+.t-toast .t-i { width: 20px; height: 20px; stroke-width: 2.25; }
+.t-toast__text { overflow: hidden; text-overflow: ellipsis; }
+.t-toast__action { border: 0; background: transparent; color: inherit; padding: 8px 12px; border-radius: var(--radius-full); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.t-toast__action:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+@keyframes t-toast-in { from { opacity: 0; transform: translate(-50%, 12px); } }
+@keyframes t-toast-out { to { opacity: 0; visibility: hidden; transform: translate(-50%, 8px); } }
+@media (min-width: 1024px) { .t-toast { bottom: 32px; } }
+
+/* ---------- Пустое состояние ---------- */
+.t-empty { display: grid; justify-items: center; gap: 6px; padding: 40px 16px; text-align: center; }
+.t-empty--compact { padding: 20px 8px 8px; }
+.t-empty__icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 8px; border-radius: 50%; background: var(--fill); color: var(--ink-2); }
+.t-empty__title { font-size: 17px; line-height: 22px; font-weight: 600; }
+.t-empty__text { max-width: 300px; font-size: 15px; line-height: 20px; color: var(--ink-2); }
+.t-empty .t-btn { margin-top: 14px; }
+
+/* ---------- Отчёт ---------- */
+.t-stats { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: start; }
+.t-stat__label { font-size: 15px; line-height: 20px; font-weight: 500; color: var(--ink-2); margin-bottom: 2px; }
+.t-stat--count { text-align: right; }
+.t-bars { display: grid; }
+.t-bar { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; column-gap: 12px; row-gap: 8px; align-items: center; padding: 10px 0; }
+.t-bar__name { font-size: 16px; line-height: 22px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-bar__val { font-size: 16px; line-height: 22px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.t-bar__pct { display: inline-block; min-width: 3.2em; text-align: right; color: var(--ink-2); font-weight: 400; font-size: 15px; }
+.t-bar__track { grid-column: 2 / -1; height: 6px; border-radius: 3px; background: var(--fill); overflow: hidden; }
+.t-bar__fill { height: 100%; width: var(--w, 0%); border-radius: 3px; background: var(--c); }
+.t-range { display: grid; gap: 16px; }
+.t-divider { height: 1px; background: var(--line); margin: 20px 0 8px; border: 0; }
+.t-more { display: flex; justify-content: center; padding-top: 12px; }
+
+/* Раскладка Обзора и Отчётов: одна колонка на телефоне, две — от 1024px */
+.t-overview, .t-overview__col, .t-report, .t-report__col { display: grid; gap: 20px; align-content: start; }
+@media (min-width: 1024px) {
+  .t-overview, .t-report { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 24px; align-items: start; }
+  .t-overview__col, .t-report__col { gap: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  .t-toast { animation: t-toast-out .01ms 5s forwards !important; }
+}

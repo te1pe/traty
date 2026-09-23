@@ -1,0 +1,11 @@
+{{define "error.html"}}
+{{template "page_start" .}}
+<div class="t-card" style="margin-top:32px">
+  <div class="t-empty">
+    <span class="t-empty__icon">{{template "icon-alert"}}</span>
+    <p class="t-empty__title">{{.Message}}</p>
+    <a class="t-btn t-btn--secondary" href="/">{{.T "error.go_home"}}</a>
+  </div>
+</div>
+{{template "page_end" .}}
+{{end}}

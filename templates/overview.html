@@ -1,0 +1,121 @@
+{{define "overview.html"}}
+{{template "page_start" .}}
+<div class="t-overview">
+
+  <div class="t-overview__col">
+    <section class="t-today">
+      <p class="t-today__label">{{.Tf "overview.today" (.DayLong .Today)}}</p>
+      {{$m := .Money .TodayTotal}}
+      <span class="t-money t-money--hero{{if $m.Fit}} t-money--fit{{end}}">{{$m.Whole}}<span class="t-money__minor">{{$m.Minor}}</span><span class="t-money__cur">{{$m.Sign}}</span></span>
+      {{if eq .TodayCount 0}}<p class="t-today__hint">{{.T "overview.today_empty"}}</p>{{end}}
+    </section>
+
+    {{if .HasAny}}
+    <section class="t-card">
+      <div class="t-card__head">
+        <h2 class="t-card__title">{{.T "overview.week"}}</h2>
+        <span class="t-card__meta">{{.WeekdaySpan .WeekFrom .WeekTo}}</span>
+      </div>
+      {{$w := .Money .WeekTotal}}
+      <span class="t-money t-money--l">{{$w.Whole}}<span class="t-money__minor">{{$w.Minor}}</span><span class="t-money__cur">{{$w.Sign}}</span></span>
+      {{if .Donut}}
+        {{template "donut" dict "P" .Page "Segments" .Donut "Count" .WeekCount}}
+      {{else}}
+        <div class="t-empty t-empty--compact">
+          <p class="t-empty__text">{{.T "overview.week_empty"}}</p>
+        </div>
+      {{end}}
+    </section>
+    {{end}}
+  </div>
+
+  <div class="t-overview__col">
+    <section class="t-card">
+      <div class="t-card__head">
+        <h2 class="t-card__title">{{.T "overview.recent"}}</h2>
+        {{if .Recent}}<a class="t-link" href="/reports?period=month">{{.T "overview.all"}}</a>{{end}}
+      </div>
+      {{if .Recent}}
+      <div class="t-list" style="margin-top:4px">
+        {{range .Recent}}{{template "expense_row" dict "P" $.Page "E" .}}{{end}}
+      </div>
+      {{else}}
+      <div class="t-empty">
+        <span class="t-empty__icon">{{template "icon-wallet"}}</span>
+        <p class="t-empty__title">{{.T "first_run.title"}}</p>
+        <p class="t-empty__text">{{.T "first_run.text"}}</p>
+        <button class="t-btn t-btn--primary" type="button" popovertarget="add-expense">{{template "icon-plus-sm"}}{{.T "action.add_expense"}}</button>
+      </div>
+      {{end}}
+    </section>
+  </div>
+
+</div>
+
+{{/* An expense being edited: its own URL, drawn as a sheet over the dashboard. */}}
+{{if .Edit}}
+<div class="t-overlay">
+  <a class="t-overlay__scrim" href="{{.Edit.ReturnTo}}" aria-label="{{.T "action.close"}}"></a>
+  <form class="t-sheet" method="post" action="/expenses/{{.Edit.ID}}" aria-labelledby="edit-title">
+    <div class="t-sheet__head">
+      <h2 class="t-sheet__title" id="edit-title">{{.T "form.edit_title"}}</h2>
+      <a class="t-close" href="{{.Edit.ReturnTo}}" aria-label="{{.T "action.close"}}">{{template "icon-close"}}</a>
+    </div>
+    <div class="t-sheet__body">
+      {{template "expense_fields" dict "P" .Page "F" .Edit "Prefix" "edit"}}
+    </div>
+    <div class="t-sheet__foot">
+      <input type="hidden" name="return_to" value="{{.Edit.ReturnTo}}">
+      <button class="t-btn t-btn--primary t-btn--lg t-btn--block" type="submit">{{.T "action.save"}}</button>
+      <button class="t-btn t-btn--danger-ghost t-btn--block" type="button" popovertarget="confirm-delete">{{template "icon-trash"}}{{.T "form.delete_expense"}}</button>
+    </div>
+  </form>
+</div>
+
+<div class="t-alert" popover id="confirm-delete" role="alertdialog" aria-labelledby="confirm-title">
+  <p class="t-alert__title" id="confirm-title">{{.T "confirm.delete_expense_title"}}</p>
+  <p class="t-alert__text">{{.T "confirm.delete_expense_text"}}</p>
+  <div class="t-alert__actions">
+    <form method="post" action="/expenses/{{.Edit.ID}}/delete">
+      <input type="hidden" name="return_to" value="{{.Edit.ReturnTo}}">
+      <button class="t-btn t-btn--danger t-btn--block" type="submit">{{.T "action.delete"}}</button>
+    </form>
+    <button class="t-btn t-btn--ghost t-btn--block" type="button" popovertarget="confirm-delete" popovertargetaction="hide">{{.T "action.cancel"}}</button>
+  </div>
+</div>
+{{end}}
+
+{{/* A category's details: a side panel on desktop, a sheet on the phone. */}}
+{{if .Detail}}
+{{$d := .Detail}}
+<div class="t-overlay t-overlay--panel">
+  <a class="t-overlay__scrim" href="/" aria-label="{{.T "action.close"}}"></a>
+  <div class="t-sheet" role="dialog" aria-labelledby="cat-title">
+    <div class="t-sheet__head">
+      <h2 class="t-sheet__title" id="cat-title"><span class="t-dot t-c{{$d.Category.ColorSlot}}" style="margin-right:8px"></span>{{$d.Category.Name}}</h2>
+      <a class="t-close" href="/" aria-label="{{.T "action.close"}}">{{template "icon-close"}}</a>
+    </div>
+    <div class="t-sheet__body">
+      <div class="t-sheet__summary">
+        {{$dm := .Money $d.Total}}
+        <span class="t-money t-money--l">{{$dm.Whole}}<span class="t-money__minor">{{$dm.Minor}}</span><span class="t-money__cur">{{$dm.Sign}}</span></span>
+        <span class="t-card__meta">{{.Plural $d.Count}} · {{pct $d.Percent}}%</span>
+      </div>
+      <div class="t-chips" style="margin-bottom:12px">
+        <a class="t-chip" href="/?category={{$d.Category.ID}}&period=week"{{if eq $d.Period "week"}} aria-current="true"{{end}}>{{.T "category.period_week"}}</a>
+        <a class="t-chip" href="/?category={{$d.Category.ID}}&period=month"{{if eq $d.Period "month"}} aria-current="true"{{end}}>{{.T "category.period_month"}}</a>
+      </div>
+      {{if $d.Expenses}}
+      <div class="t-list">
+        {{range $d.Expenses}}{{template "expense_row_plain" dict "P" $.Page "E" . "ShowCategory" false}}{{end}}
+      </div>
+      {{else}}
+      <div class="t-empty t-empty--compact"><p class="t-empty__text">{{.T "category.empty_period"}}</p></div>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}
+
+{{template "page_end" .}}
+{{end}}

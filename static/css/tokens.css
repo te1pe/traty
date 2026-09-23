@@ -1,0 +1,124 @@
+/* Траты — токены дизайн-системы. Светлая тема — :root, тёмная — [data-theme="dark"],
+   системная — тот же набор под @media (prefers-color-scheme: dark). */
+
+:root, [data-theme="light"] {
+  --bg: #f4f4f1;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --bar: #ffffffd9;
+  --fill: #ecece8;
+  --fill-strong: #e2e2dd;
+  --thumb: #ffffff;
+  --line: #e6e6e1;
+  --line-field: #8a8a84;
+  --ink: #141413;
+  --ink-2: #62625c;
+  --ink-3: #8a8a84;
+  --action: #141413;
+  --action-hover: #2e2e2c;
+  --on-action: #ffffff;
+  --danger: #c42f28;
+  --danger-soft: #fbebe9;
+  --on-danger: #ffffff;
+  --scrim: #1414134d;
+
+  --cat-1: #3b78c9;
+  --cat-2: #e06a3b;
+  --cat-3: #1f9e76;
+  --cat-4: #c0850f;
+  --cat-5: #d0608c;
+  --cat-6: #5f8f2b;
+  --cat-7: #6a58c4;
+  --cat-8: #c9474a;
+  --cat-other: var(--ink-3);
+
+  --shadow-card: 0 1px 2px #1414130a;
+  --shadow-float: 0 10px 30px #14141324, 0 2px 6px #1414130f;
+  --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px #141413;
+
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg: #0b0b0a;
+  --surface: #191918;
+  --surface-raised: #232321;
+  --bar: #232321d9;
+  --fill: #2a2a28;
+  --fill-strong: #353533;
+  --thumb: #4a4a47;
+  --line: #2c2c2a;
+  --line-field: #7c7c77;
+  --ink: #f2f2ee;
+  --ink-2: #a4a49e;
+  --ink-3: #7c7c77;
+  --action: #f2f2ee;
+  --action-hover: #ffffff;
+  --on-action: #141413;
+  --danger: #ff6b61;
+  --danger-soft: #3a1c19;
+  --on-danger: #1a0b0a;
+  --scrim: #000000a3;
+
+  --cat-1: #4d8ddb;
+  --cat-2: #d8703f;
+  --cat-3: #259b77;
+  --cat-4: #bb8a1c;
+  --cat-5: #cc6690;
+  --cat-6: #6f9d38;
+  --cat-7: #8d7fe0;
+  --cat-8: #dd5f5c;
+
+  --shadow-card: 0 0 0 1px #ffffff0a;
+  --shadow-float: 0 16px 40px #000000b3, 0 0 0 1px #ffffff12;
+  --focus-ring: 0 0 0 2px #191918, 0 0 0 4px #f2f2ee;
+}
+
+[data-theme="system"] { color-scheme: light dark; }
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="system"] {
+    color-scheme: dark;
+    --bg: #0b0b0a;
+    --surface: #191918;
+    --surface-raised: #232321;
+    --bar: #232321d9;
+    --fill: #2a2a28;
+    --fill-strong: #353533;
+    --thumb: #4a4a47;
+    --line: #2c2c2a;
+    --line-field: #7c7c77;
+    --ink: #f2f2ee;
+    --ink-2: #a4a49e;
+    --ink-3: #7c7c77;
+    --action: #f2f2ee;
+    --action-hover: #ffffff;
+    --on-action: #141413;
+    --danger: #ff6b61;
+    --danger-soft: #3a1c19;
+    --on-danger: #1a0b0a;
+    --scrim: #000000a3;
+
+    --cat-1: #4d8ddb;
+    --cat-2: #d8703f;
+    --cat-3: #259b77;
+    --cat-4: #bb8a1c;
+    --cat-5: #cc6690;
+    --cat-6: #6f9d38;
+    --cat-7: #8d7fe0;
+    --cat-8: #dd5f5c;
+
+    --shadow-card: 0 0 0 1px #ffffff0a;
+    --shadow-float: 0 16px 40px #000000b3, 0 0 0 1px #ffffff12;
+    --focus-ring: 0 0 0 2px #191918, 0 0 0 4px #f2f2ee;
+  }
+}
+
+@view-transition { navigation: auto; }

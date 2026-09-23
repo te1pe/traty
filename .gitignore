@@ -1,0 +1,56 @@
+# ---- Собранные бинарники ----
+# Go кладёт исполняемый файл рядом с исходниками и называет его по модулю.
+/traty
+traty.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# ---- Данные приложения ----
+# База создаётся при первом запуске, в репозитории ей не место.
+/data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# ---- Go ----
+/vendor/
+go.work
+go.work.sum
+coverage.out
+coverage.html
+*.prof
+*.pprof
+
+# ---- Окружение и секреты ----
+.env
+.env.*
+!.env.example
+
+# ---- macOS ----
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- Linux / Windows ----
+*~
+.directory
+Thumbs.db
+Desktop.ini
+
+# ---- Редакторы ----
+.idea/
+.vscode/
+*.swp
+*.swo
+.claude/

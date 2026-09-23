@@ -1,0 +1,17 @@
+{{define "expense_page.html"}}
+{{template "page_start" .}}
+<div class="t-formpage">
+<div class="t-pagehead">
+  <h1 class="t-pagehead__title">{{if .Form.ID}}{{.T "form.edit_title"}}{{else}}{{.T "form.new_title"}}{{end}}</h1>
+  <a class="t-link" href="{{.Form.ReturnTo}}">{{.T "action.close"}}</a>
+</div>
+<form method="post" action="{{if .Form.ID}}/expenses/{{.Form.ID}}{{else}}/expenses{{end}}" class="t-card">
+  {{template "expense_fields" dict "P" .Page "F" .Form "Prefix" "page"}}
+  <div style="display:grid;gap:8px;margin-top:20px">
+    <input type="hidden" name="return_to" value="{{.Form.ReturnTo}}">
+    <button class="t-btn t-btn--primary t-btn--lg t-btn--block" type="submit">{{.T "action.save"}}</button>
+  </div>
+</form>
+</div>
+{{template "page_end" .}}
+{{end}}

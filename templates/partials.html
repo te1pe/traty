@@ -1,0 +1,140 @@
+{{/* Fields shared by the "new expense" sheet, the edit sheet and the fallback page.
+     Takes: P — the page, F — the form, Prefix — unique id prefix. */}}
+{{define "expense_fields"}}
+{{$p := .P}}{{$f := .F}}{{$id := .Prefix}}
+<div class="t-form">
+  {{if $f.HasErrors}}<div class="t-banner t-banner--danger" role="alert">{{template "icon-alert"}}<span>{{$p.T "form.errors"}}</span></div>{{end}}
+
+  <div class="t-amount{{if $f.Err "amount"}} is-invalid{{end}}">
+    <label class="t-field__label" for="{{$id}}-amount">{{$p.T "form.amount"}}</label>
+    <div class="t-amount__box">
+      <input class="t-amount__input" id="{{$id}}-amount" name="amount" value="{{$f.Amount}}"
+             inputmode="decimal" autocomplete="off" placeholder="0" required
+             pattern="[0-9 ]{1,10}([.,][0-9]{1,2})?"
+             {{if $f.Err "amount"}}aria-invalid="true" aria-describedby="{{$id}}-amount-err"{{end}} autofocus>
+      <span class="t-amount__cur" aria-hidden="true">{{$p.Symbol}}</span>
+    </div>
+    {{with $f.Err "amount"}}<p class="t-field__error" id="{{$id}}-amount-err">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+  </div>
+
+  <fieldset class="t-field">
+    <legend class="t-field__label" style="margin-bottom:8px">{{$p.T "form.category"}}</legend>
+    {{if $p.Categories}}
+      <div class="t-chips">
+        {{range $p.Categories}}
+        <label class="t-chip">
+          <input type="radio" name="category" value="{{.ID}}" required{{if eq $f.CategoryValue (printf "%d" .ID)}} checked{{end}}>
+          <span class="t-chip__face"><span class="t-dot t-c{{.ColorSlot}}"></span>{{.Name}}</span>
+        </label>
+        {{end}}
+        <label class="t-chip t-chip--new">
+          <input type="radio" name="category" value="__new__" required{{if eq $f.CategoryValue "__new__"}} checked{{end}}>
+          <span class="t-chip__face">{{template "icon-plus-sm"}}{{$p.T "form.category_new"}}</span>
+        </label>
+      </div>
+      <div class="t-newcat">
+        <input class="t-input" name="new_category" maxlength="32" value="{{$f.NewCategory}}"
+               placeholder="{{$p.T "form.category_new_placeholder"}}" autocomplete="off"
+               aria-label="{{$p.T "form.category_new_placeholder"}}">
+      </div>
+    {{else}}
+      <input class="t-input" name="new_category" maxlength="32" value="{{$f.NewCategory}}"
+             placeholder="{{$p.T "categories.new_placeholder"}}" autocomplete="off"
+             aria-label="{{$p.T "form.category"}}" required>
+      <p class="t-field__hint">{{$p.T "form.first_category_hint"}}</p>
+    {{end}}
+    {{with $f.Err "category"}}<p class="t-field__error">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+  </fieldset>
+
+  <div class="t-field">
+    <span class="t-field__label">{{$p.T "form.date"}}</span>
+    <div class="t-datepick">
+      <div class="t-seg" role="radiogroup" aria-label="{{$p.T "form.date"}}">
+        <label><input type="radio" name="date_preset" value="today"{{if eq $f.DatePreset "today"}} checked{{end}}><span>{{$p.T "date.today"}}</span></label>
+        <label><input type="radio" name="date_preset" value="yesterday"{{if eq $f.DatePreset "yesterday"}} checked{{end}}><span>{{$p.T "date.yesterday"}}</span></label>
+        <label><input type="radio" name="date_preset" value="custom"{{if eq $f.DatePreset "custom"}} checked{{end}}><span>{{$p.T "form.date_other"}}</span></label>
+      </div>
+      <div class="t-datepick__custom">
+        <input class="t-input" type="date" name="date" value="{{$f.Date}}" max="{{$p.TodayISO}}" aria-label="{{$p.T "form.date"}}">
+      </div>
+    </div>
+    {{with $f.Err "date"}}<p class="t-field__error">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+  </div>
+
+  <div class="t-field">
+    <label class="t-field__label" for="{{$id}}-note">{{$p.T "form.note"}} <span class="t-field__opt">{{$p.T "form.optional"}}</span></label>
+    <input class="t-input" id="{{$id}}-note" name="comment" maxlength="120" value="{{$f.Comment}}"
+           placeholder="{{$p.T "form.note_placeholder"}}" enterkeyhint="done" autocomplete="off">
+    {{with $f.Err "comment"}}<p class="t-field__error">{{template "icon-alert"}}<span>{{.}}</span></p>{{end}}
+  </div>
+</div>
+{{end}}
+
+{{/* One row of an expense list. Takes: P — page, E — expense. */}}
+{{define "expense_row"}}
+{{$p := .P}}{{$e := .E}}
+<a class="t-exp{{if eq $p.NewID $e.ID}} is-new{{end}}" href="/expenses/{{$e.ID}}/edit?return_to={{$p.Path}}">
+  <span class="t-dot t-c{{$e.ColorSlot}}"></span>
+  <span class="t-exp__main">
+    <span class="t-exp__cat">{{$e.CategoryName}}</span>
+    {{if $e.Comment}}<span class="t-exp__note">{{$e.Comment}}</span>{{end}}
+  </span>
+  <span class="t-exp__side">
+    <span class="t-exp__amt t-money">{{$p.Amount $e.AmountMinor}}</span>
+    <span class="t-exp__date">{{$p.DayRelative $e.Date}}</span>
+  </span>
+</a>
+{{end}}
+
+{{/* A row inside a category sheet or a day group: no dot, no category name. */}}
+{{define "expense_row_plain"}}
+{{$p := .P}}{{$e := .E}}
+<a class="t-exp t-exp--plain{{if eq $p.NewID $e.ID}} is-new{{end}}" href="/expenses/{{$e.ID}}/edit?return_to={{$p.Path}}">
+  <span class="t-exp__main">
+    <span class="t-exp__cat">{{if .ShowCategory}}{{$e.CategoryName}}{{else if $e.Comment}}{{$e.Comment}}{{else}}<span class="t-exp__muted">{{$p.T "category.no_note"}}</span>{{end}}</span>
+    {{if and .ShowCategory $e.Comment}}<span class="t-exp__note">{{$e.Comment}}</span>{{end}}
+  </span>
+  <span class="t-exp__side">
+    <span class="t-exp__amt t-money">{{$p.Amount $e.AmountMinor}}</span>
+    <span class="t-exp__date">{{$p.DayRelative $e.Date}}</span>
+  </span>
+</a>
+{{end}}
+
+{{/* The donut plus its legend. Takes: P — page, Segments, Total, Count. */}}
+{{define "donut"}}
+{{$p := .P}}
+<div class="t-week__chart">
+  <div class="t-donut">
+    <svg viewBox="0 0 136 136" aria-hidden="true">
+      <circle class="t-donut__track" cx="68" cy="68" r="58"/>
+      {{range .Segments}}
+      {{if .IsOther}}
+      <circle class="t-donut__seg t-cother" cx="68" cy="68" r="58" stroke-dasharray="{{f2 .DashLength}} {{f2 .Gap}}" stroke-dashoffset="{{f2 .DashOffset}}"/>
+      {{else}}
+      <a href="/?category={{.CategoryID}}" tabindex="-1"><circle class="t-donut__seg t-c{{.ColorSlot}}{{if eq $p.ActiveCategory .CategoryID}} is-active{{end}}" cx="68" cy="68" r="58" stroke-dasharray="{{f2 .DashLength}} {{f2 .Gap}}" stroke-dashoffset="{{f2 .DashOffset}}"/></a>
+      {{end}}
+      {{end}}
+    </svg>
+    <div class="t-donut__center">
+      <span class="t-donut__num">{{.Count}}</span>
+      <span class="t-donut__cap">{{$p.ExpenseWord .Count}}</span>
+    </div>
+  </div>
+  <ul class="t-legend">
+    {{range .Segments}}
+    <li>
+      {{if .IsOther}}
+      <span class="t-legend__row" style="display:grid;grid-template-columns:10px minmax(0,1fr) auto;align-items:center;gap:10px;min-height:34px;padding:0 8px">
+        <span class="t-dot t-cother"></span><span class="t-legend__name">{{.Name}}</span><span class="t-legend__pct">{{pct .Percent}}%</span>
+      </span>
+      {{else}}
+      <a href="/?category={{.CategoryID}}" aria-label="{{.Name}}: {{$p.Amount .TotalMinor}}, {{pct .Percent}}%">
+        <span class="t-dot t-c{{.ColorSlot}}"></span><span class="t-legend__name">{{.Name}}</span><span class="t-legend__pct">{{pct .Percent}}%</span>
+      </a>
+      {{end}}
+    </li>
+    {{end}}
+  </ul>
+</div>
+{{end}}

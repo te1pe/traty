@@ -1,0 +1,51 @@
+{{define "settings.html"}}
+{{template "page_start" .}}
+<div class="t-narrow">
+<div class="t-pagehead"><h1 class="t-pagehead__title">{{.T "settings.title"}}</h1></div>
+
+<div class="t-stack" style="gap:0">
+  <p class="t-group__label" style="margin-top:0">{{.T "settings.currency"}}</p>
+  <form method="post" action="/settings">
+    <div class="t-group">
+      {{range .Currencies}}
+      <button class="t-cell" type="submit" name="currency" value="{{.Code}}" aria-pressed="{{if eq $.Settings.Currency .Code}}true{{else}}false{{end}}">
+        <span class="t-cell__title">{{$.T (printf "currency.%s" .Code)}}</span>
+        <span class="t-cell__value">{{.Symbol}}</span>
+        <span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+      {{end}}
+    </div>
+  </form>
+  <p class="t-group__foot">{{.T "settings.currency_note"}}</p>
+
+  <p class="t-group__label">{{.T "settings.language"}}</p>
+  <form method="post" action="/settings">
+    <div class="t-group">
+      <button class="t-cell" type="submit" name="lang" value="ru" aria-pressed="{{if eq .Settings.Lang "ru"}}true{{else}}false{{end}}">
+        <span class="t-cell__title">Русский</span><span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+      <button class="t-cell" type="submit" name="lang" value="en" aria-pressed="{{if eq .Settings.Lang "en"}}true{{else}}false{{end}}">
+        <span class="t-cell__title" lang="en">English</span><span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+    </div>
+  </form>
+
+  <p class="t-group__label">{{.T "settings.theme"}}</p>
+  <form method="post" action="/settings">
+    <div class="t-group">
+      <button class="t-cell" type="submit" name="theme" value="light" aria-pressed="{{if eq .Settings.Theme "light"}}true{{else}}false{{end}}">
+        <span class="t-cell__title">{{.T "settings.theme_light"}}</span><span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+      <button class="t-cell" type="submit" name="theme" value="dark" aria-pressed="{{if eq .Settings.Theme "dark"}}true{{else}}false{{end}}">
+        <span class="t-cell__title">{{.T "settings.theme_dark"}}</span><span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+      <button class="t-cell" type="submit" name="theme" value="system" aria-pressed="{{if eq .Settings.Theme "system"}}true{{else}}false{{end}}">
+        <span class="t-cell__title">{{.T "settings.theme_system"}}</span><span class="t-cell__check">{{template "icon-check"}}</span>
+      </button>
+    </div>
+  </form>
+  <p class="t-group__foot">{{.T "settings.theme_note"}}</p>
+</div>
+</div>
+{{template "page_end" .}}
+{{end}}
